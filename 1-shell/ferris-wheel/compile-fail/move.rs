@@ -1,5 +1,5 @@
 // FIXME: Prevent this file from compiling! Diff budget: 1 line.
-#[derive(Clone, Copy)]
+// #[derive(Clone, Copy)] Remove the #derive-s of `MyType', so multiple moves make the program not compiling.
 struct MyType(usize);
 
 // Note: do not modify this function.
