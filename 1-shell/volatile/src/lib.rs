@@ -1,6 +1,6 @@
-#![feature(const_fn)]
+#![feature(const_fn_trait_bound)]
 #![feature(decl_macro)]
-#![feature(unique)]
+// #![feature(unique)]
 #![feature(ptr_internals)]
 #![no_std]
 
