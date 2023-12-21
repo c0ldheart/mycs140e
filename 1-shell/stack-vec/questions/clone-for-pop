@@ -1,0 +1,3 @@
+Q: The pop method from Vec<T> in the standard libary is implemented for all T, but the pop method from our StackVec is only implemented when T implements the Clone trait. Why might that be? What goes wrong when the bound is removed?
+
+A: This is because we cannot move the value out of the array.

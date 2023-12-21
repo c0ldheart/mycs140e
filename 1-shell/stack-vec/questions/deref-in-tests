@@ -1,0 +1,4 @@
+Deref trait 定义了一个 deref 方法，它返回一个对内部数据的引用。在这个例子中，deref 方法返回了一个对 self.storage[0..self.len] 的引用，这是一个 T 类型的切片。
+
+因为 StackVec<'a, T> 实现了 Deref trait，所以可以在 StackVec<'a, T> 对象上直接使用 [] 运算符。
+这是因为当在 StackVec<'a, T> 对象上使用 [] 运算符时，Rust 会自动调用 deref 方法，将 StackVec<'a, T> 对象转换为 [T]，然后在 [T] 上使用 [] 运算符。
