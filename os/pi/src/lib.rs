@@ -1,5 +1,5 @@
 #![feature(core_intrinsics)]
-#![feature(const_fn)]
+// #![feature(const_fn)]
 #![feature(asm)]
 #![feature(decl_macro)]
 // #![feature(repr_align)] // stable since 1.25.0

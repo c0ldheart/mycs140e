@@ -1,9 +1,10 @@
+
 #![feature(asm, lang_items)]
 
 extern crate core;
 extern crate xmodem;
 extern crate pi;
-
+use core::arch::asm; // Import the asm macro from core::arch module
 pub mod lang_items;
 
 /// Start address of the binary to load and of the bootloader.
@@ -19,8 +20,12 @@ const MAX_BINARY_SIZE: usize = BOOTLOADER_START_ADDR - BINARY_START_ADDR;
 /// Branches to the address `addr` unconditionally.
 fn jump_to(addr: *mut u8) -> ! {
     unsafe {
-        asm!("br $0" : : "r"(addr as usize));
-        loop { asm!("nop" :::: "volatile")  }
+        // asm!("br $0" : : "r"(addr as usize));
+        // loop { asm!("nop" :::: "volatile")  }
+
+        // Rust 1.57.0 or higher
+        asm!("br {0}", in(reg) addr);
+        loop { asm!("nop", options(nomem, nostack, preserves_flags)) }
     }
 }
 
