@@ -53,9 +53,10 @@
 // #[doc(no_inline)] pub use vec::Vec;
 
 // TODO: These are additions!
-#[stable(feature = "rust1", since = "1.0.0")]
-pub use core::slice::SliceExt;
-#[stable(feature = "rust1", since = "1.0.0")]
-pub use core::str::StrExt;
+// #[stable(feature = "rust1", since = "1.0.0")]
+// pub use core::slice::SliceExt;
+// #[stable(feature = "rust1", since = "1.0.0")]
+// pub use core::str::StrExt;
 #[stable(feature = "addition", since = "1.0.0")]
-pub use std_unicode::str::*;
+pub use core::str::*;
+// pub use std_unicode::str::*;

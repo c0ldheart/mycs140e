@@ -38,11 +38,11 @@
 #![feature(fn_traits)]
 #![feature(fnbox)]
 #![feature(fused)]
-#![feature(generic_param_attrs)]
+// #![feature(generic_param_attrs)] // stable since 1.27.0
 #![feature(hashmap_hasher)]
 #![feature(heap_api)]
 #![feature(i128)]
-#![feature(i128_type)]
+// #![feature(i128_type)] // stable since 1.26.0.
 #![feature(inclusive_range)]
 #![feature(int_error_internals)]
 #![feature(integer_atomics)]
@@ -51,7 +51,7 @@
 #![feature(libc)]
 #![feature(link_args)]
 #![feature(linkage)]
-#![feature(macro_reexport)]
+#![feature(use_extern_macros)]
 #![feature(macro_vis_matcher)]
 #![feature(needs_panic_runtime)]
 #![feature(never_type)]
@@ -68,7 +68,7 @@
 #![feature(ptr_internals)]
 #![feature(rand)]
 #![feature(raw)]
-#![feature(repr_align)]
+// #![feature(repr_align)] // stable since 1.25.0
 #![feature(rustc_attrs)]
 #![feature(sip_hash_13)]
 #![feature(slice_bytes)]
@@ -80,7 +80,7 @@
 #![feature(str_char)]
 #![feature(str_internals)]
 #![feature(str_utf16)]
-#![feature(termination_trait)]
+// #![feature(termination_trait)] // stable since 1.26.0
 #![feature(test, rustc_private)]
 #![feature(thread_local)]
 #![feature(toowned_clone_into)]
@@ -102,6 +102,7 @@
 #![feature(slice_rsplit)]
 #![feature(from_ref)]
 #![feature(swap_with_slice)]
+#![feature(core_panic_info)]
 
 // Explicitly import the prelude. The compiler uses this same unstable attribute
 // to import the prelude implicitly when building crates that depend on std.
@@ -116,15 +117,18 @@ use prelude::v1::*;
 // We want to re-export a few macros from core but libcore has already been
 // imported by the compiler (via our #[no_std] attribute) In this case we just
 // add a new crate name so we can attach the re-exports to it.
-#[macro_reexport(panic, assert, assert_eq, assert_ne, debug_assert, debug_assert_eq,
-                 debug_assert_ne, unreachable, unimplemented, write, writeln, try)]
+// Re-export a few macros from core
+#[stable(feature = "rust1", since = "1.0.0")]
+pub use core::{panic, assert_eq, assert_ne, debug_assert, debug_assert_eq, debug_assert_ne};
+#[stable(feature = "rust1", since = "1.0.0")]
+pub use core::{unreachable, unimplemented, write, writeln, try};
 extern crate core as __core;
 
 // #[macro_use]
 // #[macro_reexport(vec, format)]
 // extern crate alloc;
 // extern crate alloc_system;
-extern crate std_unicode;
+// extern crate std_unicode;
 // #[doc(masked)]
 // extern crate libc;
 
@@ -135,7 +139,6 @@ extern crate std_unicode;
 
 // compiler-rt intrinsics
 #[doc(masked)]
-extern crate compiler_builtins;
 
 // // During testing, this crate is not actually the "real" std library, but rather
 // // it links to the real std library, which was compiled from this same source
@@ -226,7 +229,7 @@ pub use core::fmt;
 // #[stable(feature = "rust1", since = "1.0.0")]
 // pub use alloc::vec;
 #[stable(feature = "rust1", since = "1.0.0")]
-pub use std_unicode::char;
+pub use core::char;
 #[unstable(feature = "i128", issue = "35118")]
 pub use core::u128;
 
