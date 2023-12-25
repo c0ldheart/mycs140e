@@ -1,23 +1,28 @@
+#![feature(duration_extras)]
+
 extern crate serial;
 extern crate structopt;
+#[macro_use]
+extern crate structopt_derive;
 extern crate xmodem;
-#[macro_use] extern crate structopt_derive;
 
+use std::{time::Instant, io::Write};
 use std::path::PathBuf;
 use std::time::Duration;
 
 use structopt::StructOpt;
-use serial::core::{CharSize, BaudRate, StopBits, FlowControl, SerialDevice, SerialPortSettings};
-use xmodem::{Xmodem, Progress};
+use serial::{core::{BaudRate, CharSize, FlowControl, SerialDevice, SerialPortSettings, StopBits}, SerialPort};
+use xmodem::{Progress, Xmodem};
 
 mod parsers;
 
-use parsers::{parse_width, parse_stop_bits, parse_flow_control, parse_baud_rate};
+use parsers::{parse_baud_rate, parse_flow_control, parse_stop_bits, parse_width};
 
 #[derive(StructOpt, Debug)]
 #[structopt(about = "Write to TTY using the XMODEM protocol by default.")]
 struct Opt {
-    #[structopt(short = "i", help = "Input file (defaults to stdin if not set)", parse(from_os_str))]
+    #[structopt(short = "i", help = "Input file (defaults to stdin if not set)",
+                parse(from_os_str))]
     input: Option<PathBuf>,
 
     #[structopt(short = "b", long = "baud", parse(try_from_str = "parse_baud_rate"),
@@ -47,12 +52,78 @@ struct Opt {
     raw: bool,
 }
 
+fn progress_fn(_progress: Progress) {
+    static mut LAST_TIME: Option<Instant> = None;
+    static mut BYTES_SENT: u64 = 0;
+    unsafe {
+        BYTES_SENT += 128;
+        LAST_TIME = match LAST_TIME {
+            Some(last_time) => {
+                let now = Instant::now();
+                let duration = now - last_time;
+                let nanos = duration.as_secs() * 1_000_000_000 + duration.subsec_nanos() as u64;
+                println!(
+                    "Progress: {} bytes sent at {:.2} KiB/s",
+                    BYTES_SENT,
+                    128.0 * 1_000_000_000.0 / 1024.0 / nanos as f64
+                );
+                Some(now)
+            }
+            None => Some(Instant::now()),
+        };
+    }
+}
+
 fn main() {
     use std::fs::File;
-    use std::io::{self, BufReader, BufRead};
+    use std::io::{self, BufReader};
+
 
     let opt = Opt::from_args();
     let mut serial = serial::open(&opt.tty_path).expect("path points to invalid TTY");
 
     // FIXME: Implement the `ttywrite` utility.
+    let _ = serial.reconfigure(&|settings| {
+        settings.set_baud_rate(opt.baud_rate)?;
+        settings.set_char_size(opt.char_width);
+        settings.set_stop_bits(opt.stop_bits);
+        settings.set_flow_control(opt.flow_control);
+        Ok(())
+    });
+    serial::SerialPort::set_timeout(&mut serial,Duration::new(opt.timeout,0)).expect("set time fail");
+
+    let mut len: usize = 0;
+    match (opt.raw, opt.input) {
+        (true, None) => {
+            let input = io::stdin();
+            let mut br = BufReader::new(input);
+            let mut v = vec![];
+            io::copy(&mut br, &mut v).expect("copy fail");
+            serial.write(&v).expect("serial write fail");
+            len = v.len();
+        },
+        (true, Some(file)) => {
+            let input = File::open(file.as_path()).expect("open file fail");
+            let mut br = BufReader::new(input);
+            let mut v = vec![];
+            io::copy(&mut br, &mut v).expect("copy fail");
+            serial.write(&v).expect("serial write fail");
+            len = v.len();
+        },
+        (false, None) => {
+            let input = io::stdin();
+            let mut br = BufReader::new(input);
+            let mut v = vec![];
+            io::copy(&mut br, &mut v).expect("copy fail");
+            len = Xmodem::transmit_with_progress(&v[..], serial, progress_fn).expect("Xmodem transmit fail");
+        }
+        (false, Some(file)) => {
+            let input = File::open(file.as_path()).expect("open file fail");
+            let mut br = BufReader::new(input);
+            let mut v = vec![];
+            io::copy(&mut br, &mut v).expect("copy fail");
+            len = Xmodem::transmit_with_progress(&v[..], serial, progress_fn).expect("Xmodem transmit fail");
+        }
+    }
+    println!("wrote {len} bytes to {:?}" ,opt.tty_path);
 }
