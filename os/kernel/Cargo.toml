@@ -23,6 +23,6 @@ lto = true
 
 [dependencies]
 pi = { path = "../pi", features = ["std"] }
-
+std = {path = "../std"}
 # from assignment 1
 stack-vec = { path = "../../1-shell/stack-vec/" }

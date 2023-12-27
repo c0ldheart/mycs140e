@@ -217,7 +217,7 @@ pub trait SliceConcatExt<T: ?Sized> {
     fn join(&self, sep: &T) -> Self::Output;
 
     #[stable(feature = "rust1", since = "1.0.0")]
-    #[rustc_deprecated(since = "1.3.0", reason = "renamed to join")]
+    #[deprecated(since = "1.3.0", note = "renamed to join")]
     fn connect(&self, sep: &T) -> Self::Output;
 }
 

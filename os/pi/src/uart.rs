@@ -1,5 +1,6 @@
 use core::fmt;
-
+use core::result::Result;
+use core::option::Option;
 use volatile::prelude::*;
 use volatile::{Volatile, ReadVolatile, Reserved};
 

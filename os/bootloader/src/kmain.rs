@@ -1,6 +1,6 @@
 
 #![feature(asm, lang_items)]
-
+#![no_std]
 extern crate core;
 extern crate xmodem;
 extern crate pi;
