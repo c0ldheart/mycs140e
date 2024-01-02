@@ -1,3 +1,5 @@
+#![feature(panic_info_message)]
+#![no_std]
 #![feature(lang_items)]
 #![feature(core_intrinsics)]
 // #![feature(const_fn)]
@@ -9,8 +11,7 @@
 #![feature(never_type)]
 #![feature(ptr_internals)]
 #![feature(negative_impls)]
-#![no_std]
-
+#![feature(allocator_api, global_allocator)]
 
 // extern crate core;
 extern crate pi;
@@ -20,7 +21,7 @@ pub mod lang_items;
 pub mod mutex;
 pub mod console;
 pub mod shell;
-
+pub mod allocator;
 use core::fmt::Write;
 
 
@@ -28,12 +29,13 @@ use console::_print;
 use pi::{gpio::Gpio, timer, uart};
 
 use crate::console::{kprint, noblock_kprintln};
-
-
+use allocator::Allocator;
+#[global_allocator]
+pub static ALLOCATOR: Allocator = Allocator::uninitialized();
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
     // FIXME: Start the shell.
-
+    // ALLOCATOR.initialize();
     let mut gpio_19 = Gpio::new(19).into_output();
     gpio_19.set();
     timer::spin_sleep_ms(200);

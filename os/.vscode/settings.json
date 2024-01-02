@@ -2,6 +2,8 @@
     "editor.inlayHints.fontFamily": "Fira Code",
     "rust-analyzer.linkedProjects": [
         "./kernel/Cargo.toml",
-        "./kernel/Cargo.toml"
+        "./kernel/Cargo.toml",
+        "./pi/Cargo.toml",
+        "./pi/Cargo.toml"
     ]
 }

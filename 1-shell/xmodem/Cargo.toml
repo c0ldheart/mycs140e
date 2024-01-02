@@ -4,6 +4,6 @@ version = "0.1.0"
 authors = ["Sergio Benitez <sb@sergio.bz>"]
 
 [dependencies]
-[dependencies.std]
-path = "/Users/zhujunkai/rust/cs140e/mycs140e/os/std"
-stage = 2
+# [dependencies.std]
+# path = "/Users/zhujunkai/rust/cs140e/mycs140e/os/std"
+# stage = 2

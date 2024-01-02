@@ -1,5 +1,3 @@
-#![feature(duration_extras)]
-
 extern crate serial;
 extern crate structopt;
 #[macro_use]
