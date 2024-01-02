@@ -3,5 +3,5 @@ core = {}
 # std_unicode = {}
 
 [dependencies.std]
-path = "../std"
+path = "/Users/zhujunkai/rust/cs140e/mycs140e/os/std"
 stage = 2

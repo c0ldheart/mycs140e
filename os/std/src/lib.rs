@@ -277,3 +277,5 @@ pub mod sync;
 // #[unstable(feature = "termination_trait", issue = "43301")]
 // pub use self::termination::Termination;
 // extern crate compiler_builtins;
+
+pub mod os;

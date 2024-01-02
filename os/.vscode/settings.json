@@ -1,0 +1,7 @@
+{
+    "editor.inlayHints.fontFamily": "Fira Code",
+    "rust-analyzer.linkedProjects": [
+        "./kernel/Cargo.toml",
+        "./kernel/Cargo.toml"
+    ]
+}

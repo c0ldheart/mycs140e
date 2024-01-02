@@ -1,5 +1,6 @@
+#![no_std]
+extern crate std;
 use std::io;
-
 mod progress;
 mod read_ext;
 #[cfg(test)]

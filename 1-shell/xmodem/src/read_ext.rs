@@ -1,5 +1,6 @@
-use std::io;
 
+
+use std::{io, result::Result::{Ok, Err}};
 pub trait ReadExt: io::Read {
     fn read_max(&mut self, mut buf: &mut [u8]) -> io::Result<usize> {
         let start_len = buf.len();

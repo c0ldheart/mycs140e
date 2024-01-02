@@ -2,9 +2,9 @@ use core::panic::PanicInfo;
 
 #[lang = "eh_personality"] pub extern fn eh_personality() {}
 
-#[lang = "panic_impl"]
+#[panic_handler]
 #[no_mangle]
-pub extern fn rust_begin_panic(_info: &PanicInfo) -> ! {
+fn panic(_info: &core::panic::PanicInfo) -> ! {
     loop {}
 }
 
