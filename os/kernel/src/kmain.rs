@@ -40,33 +40,37 @@ pub unsafe extern "C" fn kmain() {
     gpio_19.clear();
     let mut uart = uart::MiniUart::new(); // Move the creation of uart outside of the loop
     // uart.write_str("start!").unwrap();
-    loop {
+    // loop {
 
-        let readed = uart.read_byte();
-        gpio_19.set();
-        timer::spin_sleep_ms(100);
-        gpio_19.clear();
-        uart.write_byte(readed);
-        uart.write_str("<->").unwrap();
+    //     let readed = uart.read_byte();
+    //     gpio_19.set();
+    //     timer::spin_sleep_ms(100);
+    //     gpio_19.clear();
+    //     uart.write_byte(readed);
+    //     uart.write_str("<->").unwrap();
 
-        if readed == b'q' {
-            uart.write_str("quit and use kprintln\n").unwrap();
-            break;
-        }
-    }
+    //     if readed == b'q' {
+    //         uart.write_str("quit and use kprintln\n").unwrap();
+    //         break;
+    //     }
+    // }
+    // loop {
+    //     // gpio_19.set();
+    //     // timer::spin_sleep_ms(200);
+    //     // gpio_19.clear();
+    //     // timer::spin_sleep_ms(200);
+    //     let readed = uart.read_byte();
+    //     gpio_19.set();
+    //     timer::spin_sleep_ms(100);
+    //     gpio_19.clear();
+    //     uart.write_byte(readed);
+    //     uart.write_str("<-").unwrap();
+    //     noblock_kprintln!("no block println");
+    //     kprint!("hello\n");
+    //     // gpio_19.set();
+    // }
+
     loop {
-        // gpio_19.set();
-        // timer::spin_sleep_ms(200);
-        // gpio_19.clear();
-        // timer::spin_sleep_ms(200);
-        let readed = uart.read_byte();
-        gpio_19.set();
-        timer::spin_sleep_ms(100);
-        gpio_19.clear();
-        uart.write_byte(readed);
-        uart.write_str("<-").unwrap();
-        noblock_kprintln!("no block println");
-        // kprint!("hello\n");
-        gpio_19.set();
+        shell::shell("$ ");
     }
 }
