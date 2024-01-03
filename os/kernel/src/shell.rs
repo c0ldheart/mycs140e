@@ -67,6 +67,8 @@ pub fn shell(prefix: &str) -> ! {
     if b == ENTER {
         kprintln!("{}", BANNER);
     }
+    show_atag();
+
     let mut storage = [0u8; 1024];
     let mut cmd = StackVec::new(&mut storage);
     'outer: loop {
@@ -145,5 +147,13 @@ pub fn shell(prefix: &str) -> ! {
                 console.write_byte(NEWLINE);
             }
         }
+    }
+}
+
+fn show_atag() {
+    kprintln!("show tags ...");
+    let tags = pi::atags::Atags::get();
+    for tag in tags {
+        kprintln!("{:#?}", tag);
     }
 }

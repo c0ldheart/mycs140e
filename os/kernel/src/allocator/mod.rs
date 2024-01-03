@@ -1,19 +1,15 @@
 mod linked_list;
 mod util;
 
-#[path = "bin.rs"]
+#[path = "bump.rs"]
 mod imp;
 
 #[cfg(test)]
 mod tests;
 
 use mutex::Mutex;
-// #[cfg(test)]
-// use core::alloc::{GlobalAlloc, Layout};
-
-use core::alloc::{GlobalAlloc, Layout};
-use core::cmp::max;
-use pi::atags::Atags;
+use alloc::heap::{Alloc, AllocErr, Layout};
+use std::cmp::max;
 
 /// Thread-safe (locking) wrapper around a particular memory allocator.
 #[derive(Debug)]
@@ -39,7 +35,7 @@ impl Allocator {
     }
 }
 
-unsafe impl GlobalAlloc for Allocator {
+unsafe impl<'a> Alloc for &'a Allocator {
     /// Allocates memory. Returns a pointer meeting the size and alignment
     /// properties of `layout.size()` and `layout.align()`.
     ///
@@ -60,12 +56,8 @@ unsafe impl GlobalAlloc for Allocator {
     /// Returning `Err` indicates that either memory is exhausted
     /// (`AllocError::Exhausted`) or `layout` does not meet this allocator's
     /// size or alignment constraints (`AllocError::Unsupported`).
-    unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
-        self.0
-            .lock()
-            .as_mut()
-            .expect("allocator uninitialized")
-            .alloc(layout).unwrap()
+    unsafe fn alloc(&mut self, layout: Layout) -> Result<*mut u8, AllocErr> {
+        self.0.lock().as_mut().expect("allocator uninitialized").alloc(layout)
     }
 
     /// Deallocates the memory referenced by `ptr`.
@@ -81,12 +73,8 @@ unsafe impl GlobalAlloc for Allocator {
     ///
     /// Parameters not meeting these conditions may result in undefined
     /// behavior.
-    unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
-        self.0
-            .lock()
-            .as_mut()
-            .expect("allocator uninitialized")
-            .dealloc(ptr, layout);
+    unsafe fn dealloc(&mut self, ptr: *mut u8, layout: Layout) {
+        self.0.lock().as_mut().expect("allocator uninitialized").dealloc(ptr, layout);
     }
 }
 
@@ -99,21 +87,7 @@ extern "C" {
 ///
 /// This function is expected to return `Some` under all normal cirumstances.
 fn memory_map() -> Option<(usize, usize)> {
-    let binary_end = unsafe { (&_end as *const u8) as usize };
+    let binary_end = unsafe { (&_end as *const u8) as u32 };
 
-    for tag in Atags::get() {
-        match tag.mem() {
-            Some(mem) => {
-                let mut start = mem.start as usize;
-                let end = (mem.start + mem.size) as usize;
-                if binary_end < end {
-                    start = max(start, binary_end);
-                }
-                return Some((start, end));
-            }
-            _ => {}
-        }
-    }
-
-    None
+    unimplemented!("memory map fetch")
 }
