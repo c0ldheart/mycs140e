@@ -6,7 +6,7 @@ TTYWRITE ?= ttywrite
 PI_TTY ?= /dev/tty.SLAB_USBtoUART
 CCFLAGS ?= -Wall -O2 -nostdlib -nostartfiles -ffreestanding -pie -fpie
 LDFLAGS ?= --gc-sections -static -nostdlib -nostartfiles --no-dynamic-linker
-XARGO ?= CARGO_INCREMENTAL=0 RUST_TARGET_PATH="$(shell pwd)" xargo
+XARGO ?= CARGO_INCREMENTAL=0 RUST_TARGET_PATH="$(shell pwd)" xargo -Z build-std=alloc,core
 CARGO ?= cargo
 
 LD_LAYOUT := ext/layout.ld

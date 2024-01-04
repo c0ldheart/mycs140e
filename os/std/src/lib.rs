@@ -103,7 +103,7 @@
 #![feature(from_ref)]
 #![feature(swap_with_slice)]
 #![feature(core_panic_info)]
-
+extern crate alloc;
 // Explicitly import the prelude. The compiler uses this same unstable attribute
 // to import the prelude implicitly when building crates that depend on std.
 #[prelude_import]
@@ -122,7 +122,7 @@ use prelude::v1::*;
 pub use core::{panic, assert_eq, assert_ne, debug_assert, debug_assert_eq, debug_assert_ne};
 #[stable(feature = "rust1", since = "1.0.0")]
 pub use core::{unreachable, unimplemented, write, writeln};
-extern crate core as __core;
+// extern crate core as __core;
 
 // #[macro_use]
 // #[macro_reexport(vec, format)]
@@ -223,11 +223,11 @@ pub use core::fmt;
 // #[stable(feature = "rust1", since = "1.0.0")]
 // pub use alloc::slice;
 // #[stable(feature = "rust1", since = "1.0.0")]
-// pub use alloc::str;
-// #[stable(feature = "rust1", since = "1.0.0")]
-// pub use alloc::string;
-// #[stable(feature = "rust1", since = "1.0.0")]
-// pub use alloc::vec;
+// pub use core::str;
+#[stable(feature = "rust1", since = "1.0.0")]
+pub use alloc::string;
+#[stable(feature = "rust1", since = "1.0.0")]
+pub use alloc::vec;
 #[stable(feature = "rust1", since = "1.0.0")]
 pub use core::char;
 #[unstable(feature = "i128", issue = "35118")]

@@ -4,6 +4,10 @@ use stack_vec::StackVec;
 use std::fmt;
 use std::fmt::Write;
 use std::str;
+use std::string;
+use std::vec;
+
+use crate::allocator::Allocator;
 /// Error type for `Command` parse failures.
 #[derive(Debug)]
 enum Error {
@@ -67,8 +71,8 @@ pub fn shell(prefix: &str) -> ! {
     if b == ENTER {
         kprintln!("{}", BANNER);
     }
-    show_atag();
-
+    // show_atag();
+    test_string();
     let mut storage = [0u8; 1024];
     let mut cmd = StackVec::new(&mut storage);
     'outer: loop {
@@ -147,6 +151,16 @@ pub fn shell(prefix: &str) -> ! {
                 console.write_byte(NEWLINE);
             }
         }
+    }
+}
+
+fn test_string() {
+
+    kprintln!("test vec ...");
+    let mut v = vec![];
+    for i in 0..10 {
+        v.push(i);
+        kprintln!("{:?}", v);
     }
 }
 

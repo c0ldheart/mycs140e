@@ -8,7 +8,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use __core::{prelude::v1::derive, fmt::Debug};
+use core::{prelude::v1::derive, fmt::Debug};
 use io::prelude::*;
 
 // use core::convert::TryInto;

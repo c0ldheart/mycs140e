@@ -8,7 +8,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-use __core::{prelude::v1::derive, fmt::Debug, hash::Hash};
+use core::{prelude::v1::derive, fmt::Debug, hash::Hash};
 // use error;
 use fmt;
 use result;

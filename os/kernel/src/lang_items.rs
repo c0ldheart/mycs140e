@@ -4,7 +4,7 @@ use console::noblock_kprintln;
 use core::alloc::Layout;
 
 #[no_mangle]
-
+#[cfg(not(test))]
 #[panic_handler]
 pub fn panic_fmt(panic_info: &PanicInfo) -> ! {
     // Avoid deadlock
@@ -21,7 +21,7 @@ pub fn panic_fmt(panic_info: &PanicInfo) -> ! {
     }
 }
 
-
+#[cfg(not(test))]
 #[lang = "eh_personality"]
 pub extern "C" fn eh_personality() {}
 

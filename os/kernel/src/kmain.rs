@@ -17,60 +17,29 @@
 extern crate pi;
 extern crate stack_vec;
 extern crate std;
+
 pub mod lang_items;
 pub mod mutex;
 pub mod console;
 pub mod shell;
-// pub mod allocator;
-use core::fmt::Write;
+pub mod allocator;
 
-
-use console::_print;
 use pi::{gpio::Gpio, timer, uart};
 
-use crate::console::{kprint, noblock_kprintln};
-// use allocator::Allocator;
-// #[global_allocator]
-// pub static ALLOCATOR: Allocator = Allocator::uninitialized();
+
+use allocator::Allocator;
+
+#[global_allocator]
+pub static ALLOCATOR: allocator::Allocator = Allocator::uninitialized();
+
 #[no_mangle]
 pub unsafe extern "C" fn kmain() {
     // FIXME: Start the shell.
-    // ALLOCATOR.initialize();
-    let mut gpio_19 = Gpio::new(19).into_output();
-    gpio_19.set();
-    timer::spin_sleep_ms(200);
-    gpio_19.clear();
-    let mut uart = uart::MiniUart::new(); // Move the creation of uart outside of the loop
-    // uart.write_str("start!").unwrap();
-    // loop {
-
-    //     let readed = uart.read_byte();
-    //     gpio_19.set();
-    //     timer::spin_sleep_ms(100);
-    //     gpio_19.clear();
-    //     uart.write_byte(readed);
-    //     uart.write_str("<->").unwrap();
-
-    //     if readed == b'q' {
-    //         uart.write_str("quit and use kprintln\n").unwrap();
-    //         break;
-    //     }
-    // }
-    // loop {
-    //     // gpio_19.set();
-    //     // timer::spin_sleep_ms(200);
-    //     // gpio_19.clear();
-    //     // timer::spin_sleep_ms(200);
-    //     let readed = uart.read_byte();
-    //     gpio_19.set();
-    //     timer::spin_sleep_ms(100);
-    //     gpio_19.clear();
-    //     uart.write_byte(readed);
-    //     uart.write_str("<-").unwrap();
-    //     noblock_kprintln!("no block println");
-    //     kprint!("hello\n");
-    //     // gpio_19.set();
-    // }
+    ALLOCATOR.initialize();
+    // let mut gpio_19 = Gpio::new(19).into_output();
+    // gpio_19.set();
+    // timer::spin_sleep_ms(200);
+    // gpio_19.clear();
 
     loop {
         shell::shell("$ ");

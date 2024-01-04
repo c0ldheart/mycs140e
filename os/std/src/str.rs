@@ -45,11 +45,13 @@ use core::str::pattern::{Searcher, ReverseSearcher, DoubleEndedSearcher};
 use core::mem;
 use core::iter::FusedIterator;
 
+use core::alloc;
+
 // use vec_deque::VecDeque;
 // use borrow::{Borrow, ToOwned};
-// use string::String;
+
 // use std_unicode;
-// use vec::Vec;
+// use alloc::vec;
 use slice::{SliceConcatExt, SliceIndex};
 // use boxed::Box;
 

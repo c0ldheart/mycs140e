@@ -270,8 +270,8 @@
 
 #![stable(feature = "rust1", since = "1.0.0")]
 
-use __core::fmt::Debug;
-use __core::prelude::v1::derive;
+use core::fmt::Debug;
+use core::prelude::v1::derive;
 use cmp;
 use core::str as core_str;
 // use error as std_error;
